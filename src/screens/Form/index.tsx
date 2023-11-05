@@ -63,7 +63,7 @@ export function Form() {
     >
       <View style={styles.content}>
         <ScrollView>
-          <HeaderForm />
+          <HeaderForm title='Cadastrar Viagem'/>
           <View style={styles.form}>
             <Input
               label="Local"

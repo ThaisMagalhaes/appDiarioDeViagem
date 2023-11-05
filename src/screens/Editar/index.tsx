@@ -8,10 +8,16 @@ import { HeaderForm } from '../../components/HeaderForm';
 import { DatabaseConnection } from '../../database/database-connection';
 import DatePickerComponent from '../../components/DatePickerApp';
 import { CheckBox } from 'react-native-elements';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const db = DatabaseConnection.getConnection();
 
 export function Editar() {
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  const dados = route.params;
+
   const [local, setLocal] = useState("");
   const [finalizado, setFinalizado] = useState("0");
   const [dateValue, setDateValue] = useState('');
@@ -26,7 +32,7 @@ export function Editar() {
     setDateValue(date);
   };
 
-  const handleRegisterViagem = () => {
+  const handleAlterarViagem = () => {
     try {
       if (!local) {
         Alert.alert('Por favor, preencha o campo Local!');
@@ -35,7 +41,7 @@ export function Editar() {
 
       db.transaction(function (tx) {
         tx.executeSql(
-          'INSERT INTO table_viagem (local, data, finalizado) VALUES (?,?,?)',
+          'UPDATE table_viagem SET local = ?, data = ?, finalizado = ? WHERE id=?',
           [local, dateValue, finalizado],
           (tx, results) => {
             console.log('Results', results.rowsAffected);
@@ -69,7 +75,7 @@ export function Editar() {
     >
       <View style={styles.content}>
         <ScrollView>
-          <HeaderForm />
+          <HeaderForm title='Editar Viagem' />
           <View style={styles.form}>
             <Input
               label="Local"
@@ -78,18 +84,16 @@ export function Editar() {
             />
             <DatePickerComponent valor={handleDateChange} />
 
-            <View>
               <CheckBox
                 title="Finalizado"
                 checked={checked}
                 onPress={toggleCheckBox}
               />
-            </View>
           </View>
           <View style={styles.footer}>
             <Button
               title="Salvar"
-              onPress={handleRegisterViagem}
+              onPress={handleAlterarViagem}
             />
           </View>
         </ScrollView>

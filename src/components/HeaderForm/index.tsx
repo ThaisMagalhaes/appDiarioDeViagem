@@ -5,7 +5,11 @@ import { TouchableOpacity, View, Text } from 'react-native';
 
 import { styles } from './styles';
 
-export function HeaderForm() {
+type Props = {
+  title: string;
+};
+
+export function HeaderForm({ title, ...rest }: Props) {
   const navigation = useNavigation();
 
   return (
@@ -22,7 +26,7 @@ export function HeaderForm() {
       </TouchableOpacity>
 
       <Text style={styles.title}>
-        Cadastrar Viagem
+        {title}
       </Text>
     </View>
   );

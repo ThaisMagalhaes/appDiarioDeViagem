@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Home } from '../screens/Home';
 import { Form } from '../screens/Form';
+import { Editar } from '../screens/Editar';
 
 
 const { Navigator, Screen } = createNativeStackNavigator();
@@ -19,6 +20,10 @@ export function Routes() {
         <Screen
           name="Form"
           component={Form}
+        />
+         <Screen
+          name="Editar"
+          component={Editar}
         />
       
       </Navigator>

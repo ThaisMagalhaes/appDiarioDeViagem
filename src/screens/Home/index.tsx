@@ -4,12 +4,14 @@ import { Card } from '../../components/Card';
 import { HeaderHome } from '../../components/HeaderHome';
 import { styles } from './styles';
 import { DatabaseConnection } from '../../database/database-connection';
+import { useNavigation } from '@react-navigation/native';
 
 
 const db = DatabaseConnection.getConnection();
 
 
 export function Home() {
+  const navigation = useNavigation();
   const [flatListItems, setFlatListItems] = useState([]);
 
   useEffect(() => {
@@ -75,14 +77,15 @@ const handleRemove = (id) => {
   });
 };
 
-const handleUpdate = (id) => {
+const handleUpdate = (obj) => {
 
+  navigation.navigate("Editar", {dados:obj});
 
 };
 
 const renderListItem = ({ item }) => (
   <View style={styles.container}>
-    <Card viagem={item} onPressDelete={() => handleRemove(item.id)} onPressUpdate={() => handleUpdate(item.id)} />
+    <Card viagem={item} onPressDelete={() => handleRemove(item.id)} onPressUpdate={() => handleUpdate(item)} />
   </View>
 );
 
