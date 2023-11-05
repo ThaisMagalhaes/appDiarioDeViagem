@@ -16,7 +16,7 @@ type Props = {
 
 
 export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
-  
+
   const showDeleteConfirmation = () => {
     Alert.alert(
       'Alerta',
@@ -51,11 +51,19 @@ export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
           )}
         </View>
       </View>
-      <View style={styles.button}>
-        <TouchableOpacity onPress={onPressUpdate}>
-          <MaterialIcons name="mode-edit" size={22} color="#6448B7" />
-        </TouchableOpacity>
-      </View>
+      {viagem.finalizado ? (
+        <View style={styles.button}>
+          <TouchableOpacity onPress={onPressUpdate}>
+            <MaterialIcons name="visibility" size={22} color="#6448B7" />
+          </TouchableOpacity>
+        </View>
+        ) : (
+          <View style={styles.button}>
+          <TouchableOpacity onPress={onPressUpdate}>
+            <MaterialIcons name="mode-edit" size={22} color="#6448B7" />
+          </TouchableOpacity>
+        </View>
+      )}
       <View style={styles.button}>
         <TouchableOpacity onPress={showDeleteConfirmation}>
           <MaterialIcons name="delete" size={22} color="#6448B7" />
@@ -64,3 +72,4 @@ export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
     </View>
   );
 }
+
