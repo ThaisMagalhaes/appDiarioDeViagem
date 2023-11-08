@@ -6,50 +6,60 @@ import {
   Platform,
   TouchableOpacity,
   Modal,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
-import DatePicker from "react-native-modern-datepicker";
-import { getFormatedDate } from "react-native-modern-datepicker";
+  TextInput,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useState } from 'react';
+import DatePicker, { getFormatedDate } from 'react-native-modern-datepicker';
 
-export default function App({valor}) {
+const convertToDate = (strDate: string) => {
+  const newDate = new Date(Date.parse(strDate.replaceAll('/', '-')));
+  newDate.setHours(0);
+  newDate.setMinutes(0);
+  newDate.setSeconds(0);
+
+  return newDate;
+};
+
+export default function App({ valor }) {
   const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
-  const today = new Date();
-  const startDate = getFormatedDate(
-    "DD/MM/YYYY"
+  const [selectedStartDate, setSelectedStartDate] = useState(
+    getFormatedDate(new Date(), 'DD/MM/yyyy')
   );
-  const [selectedStartDate, setSelectedStartDate] = useState("");
-  const [startedDate, setStartedDate] = useState("12/12/2023");
 
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate);
-    valor(propDate);
+  function handleChangeStartDate(date: string) {
+    const newDate = convertToDate(date);
+
+    setSelectedStartDate(date);
+    setOpenStartDatePicker(false);
+    valor(newDate);
   }
 
   const handleOnPressStartDate = () => {
     setOpenStartDatePicker(!openStartDatePicker);
   };
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#fff",
-        }}
       >
-        <View style={{ flex: 1, alignItems: "center" }}>
-
-          <View style={{ width: "100%", paddingHorizontal: 10
-          , marginTop: 10 }}>
+        <View>
+          <View>
             <View>
-              <Text style={{ fontSize: 18 }}>Data</Text>
+              <Text className="mb-2 text-base text-zinc-500">Data</Text>
               <TouchableOpacity
-                style={styles.inputBtn}
+                activeOpacity={0.8}
                 onPress={handleOnPressStartDate}
+                className="h-14 w-full justify-center rounded border border-zinc-200 bg-white px-4 py-2 text-lg focus:border-2 focus:border-violet-600"
               >
-                <Text>{selectedStartDate}</Text>
+                <Text className="text-base">
+                  {convertToDate(selectedStartDate).toLocaleString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: '2-digit',
+                  })}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -59,33 +69,31 @@ export default function App({valor}) {
             animationType="slide"
             transparent={true}
             visible={openStartDatePicker}
+            onRequestClose={() => setOpenStartDatePicker(false)}
           >
-            <View style={styles.centeredView}>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPressOut={() => setOpenStartDatePicker(false)}
+              className="flex-1 items-center justify-center"
+            >
               <View style={styles.modalView}>
                 <DatePicker
                   mode="calendar"
-                  minimumDate={startDate}
-                  selected={startedDate}
-                  onDateChanged={handleChangeStartDate}
-                  onSelectedChange={(date) => setSelectedStartDate(date)}
-                  locale={'pt-BR'}
-                  format="DD-MM-YYYY"
+                  selected={selectedStartDate}
+                  onDateChange={handleChangeStartDate}
+                  locale="pt-BR"
                   options={{
-                    backgroundColor: "#080516",
-                    textHeaderColor: "#469ab6",
-                    textDefaultColor: "#FFFFFF",
-                    selectedTextColor: "#FFF",
-                    mainColor: "#469ab6",
-                    textSecondaryColor: "#FFFFFF",
-                    borderColor: "rgba(122, 146, 165, 0.1)",
+                    backgroundColor: '#080516',
+                    textHeaderColor: '#469ab6',
+                    textDefaultColor: '#FFFFFF',
+                    selectedTextColor: '#FFF',
+                    mainColor: '#469ab6',
+                    textSecondaryColor: '#FFFFFF',
+                    borderColor: 'rgba(122, 146, 165, 0.1)',
                   }}
                 />
-
-                <TouchableOpacity onPress={handleOnPressStartDate}>
-                  <Text style={{ color: "white" }}>Fechar</Text>
-                </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           </Modal>
         </View>
       </KeyboardAvoidingView>
@@ -94,40 +102,15 @@ export default function App({valor}) {
 }
 
 const styles = StyleSheet.create({
-  textHeader: {
-    fontSize: 36,
-    marginVertical: 60,
-    color: "#111",
-  },
-  textSubHeader: {
-    fontSize: 25,
-    color: "#111",
-  },
-  inputBtn: {
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: "#222",
-    height: 50,
-    paddingLeft: 8,
-    fontSize: 18,
-    justifyContent: "center",
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  centeredView: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   modalView: {
     margin: 20,
-    backgroundColor: "#080516",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#080516',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 20,
     padding: 35,
-    width: "90%",
-    shadowColor: "#000",
+    width: '90%',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,

@@ -1,20 +1,19 @@
 import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
-import { styles } from './styles';
-
 type Props = TouchableOpacityProps & {
   title: string;
-}
+};
 
-export function Button({ title, ...rest }: Props) {
+export function Button({ title, className, ...rest }: Props) {
   return (
     <TouchableOpacity
-      style={styles.container}
+      activeOpacity={0.8}
+      className={
+        className + ' bg-verde h-14 w-full items-center justify-center rounded'
+      }
       {...rest}
     >
-      <Text style={styles.title}>
-        {title}
-      </Text>
+      <Text className="text-base font-bold text-zinc-100">{title}</Text>
     </TouchableOpacity>
   );
 }

@@ -5,7 +5,6 @@ import { HeaderHome } from '../../components/HeaderHome';
 import { styles } from './styles';
 import { DatabaseConnection } from '../../database/database-connection';
 import { useNavigation } from '@react-navigation/native';
-
 const db = DatabaseConnection.getConnection();
 
 export function Home() {

@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from 'react-native';
 import Toast from 'react-native-toast-message';
-import { styles } from './styles';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { HeaderForm } from '../../components/HeaderForm';
 import { DatabaseConnection } from '../../database/database-connection';
 import DatePickerComponent from '../../components/DatePickerApp';
+import { DatePicker } from '../../components/DatePicker';
 
 const db = DatabaseConnection.getConnection();
 
 export function Form() {
-  const [local, setLocal] = useState("");
-  const [finalizado, setFinalizado] = useState("0");
-  const [dateValue, setDateValue] = useState('');
+  const [local, setLocal] = useState('');
+  const [finalizado, setFinalizado] = useState('0');
+  const [dateValue, setDateValue] = useState<Date>(null);
 
-  const handleDateChange = (date) => {
-    // A função de retorno de chamada para atualizar o valor do campo de data
+  const handleDateChange = (date: Date) => {
     setDateValue(date);
   };
 
@@ -30,18 +35,18 @@ export function Form() {
       db.transaction(function (tx) {
         tx.executeSql(
           'INSERT INTO table_viagem (local, data, finalizado) VALUES (?,?,?)',
-          [local, dateValue, finalizado],
+          [local, dateValue.toLocaleString(), finalizado],
           (tx, results) => {
             console.log('Results', results.rowsAffected);
             if (results.rowsAffected > 0) {
               Toast.show({
-                type: "success",
-                text1: "Cadastrado com sucesso!"
+                type: 'success',
+                text1: 'Cadastrado com sucesso!',
               });
             } else {
               Toast.show({
-                type: "error",
-                text1: "Não foi possível cadastrar."
+                type: 'error',
+                text1: 'Não foi possível cadastrar.',
               });
             }
           }
@@ -50,37 +55,33 @@ export function Form() {
     } catch (error) {
       console.error(error);
       Toast.show({
-        type: "error",
-        text1: "Não foi possível cadastrar."
+        type: 'error',
+        text1: 'Não foi possível cadastrar.',
       });
     }
-  }
+  };
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
     >
-      <View style={styles.content}>
-        <ScrollView>
-          <HeaderForm title='Cadastrar Viagem'/>
-          <View style={styles.form}>
-            <Input
-              label="Local"
-              onChangeText={setLocal}
-              value={local}
-            />
-            <DatePickerComponent valor={handleDateChange} />
+      <HeaderForm title="Cadastrar Viagem" />
+      <ScrollView className="w-full p-6">
+        <Input
+          label="Local"
+          placeholder="Informe o local da viagem"
+          onChangeText={setLocal}
+          value={local}
+        />
 
-          </View>
-          <View style={styles.footer}>
-            <Button
-              title="Salvar"
-              onPress={handleRegisterViagem}
-            />
-          </View>
-        </ScrollView>
-      </View>
+        <DatePicker onChange={handleDateChange} />
+
+        <Button
+          className="mt-12"
+          title="Salvar"
+          onPress={handleRegisterViagem}
+        />
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
