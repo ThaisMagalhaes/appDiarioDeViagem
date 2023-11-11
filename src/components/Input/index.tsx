@@ -1,6 +1,6 @@
-import { Text, TextInput, TextInputProps, View } from 'react-native';
+import { Text, TextInput, TextInputProps, View, AccessibilityActionEvent } from 'react-native';
+import { styles } from "./styles";
 
-import { styles } from './styles';
 
 type Props = TextInputProps & {
   label: string;

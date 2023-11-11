@@ -57,8 +57,8 @@ export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
             <MaterialIcons name="visibility" size={22} color="#6448B7" />
           </TouchableOpacity>
         </View>
-        ) : (
-          <View style={styles.button}>
+      ) : (
+        <View style={styles.button}>
           <TouchableOpacity onPress={onPressUpdate}>
             <MaterialIcons name="mode-edit" size={22} color="#6448B7" />
           </TouchableOpacity>

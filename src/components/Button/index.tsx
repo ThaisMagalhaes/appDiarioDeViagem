@@ -1,6 +1,5 @@
 import { Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
-import { styles } from './styles';
 
 type Props = TouchableOpacityProps & {
   title: string;
@@ -8,11 +7,11 @@ type Props = TouchableOpacityProps & {
 
 export function Button({ title, ...rest }: Props) {
   return (
-    <TouchableOpacity
-      style={styles.container}
+    <TouchableOpacity className='h-14 w-full items-center justify-center rounded bg-verde'
+
       {...rest}
     >
-      <Text style={styles.title}>
+      <Text className='font-bold text-zinc-100 text-base'>
         {title}
       </Text>
     </TouchableOpacity>
