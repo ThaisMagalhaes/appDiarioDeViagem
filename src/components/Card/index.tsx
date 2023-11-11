@@ -1,7 +1,7 @@
-import { Alert, Text, TouchableOpacity, View } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Alert, Text, TouchableOpacity, View } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
-import { styles } from './styles';
+import { styles } from "./styles";
 
 type Props = {
   viagem: {
@@ -14,20 +14,18 @@ type Props = {
   onPressUpdate: () => void;
 };
 
-
 export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
-
   const showDeleteConfirmation = () => {
     Alert.alert(
-      'Alerta',
+      "Alerta",
       `Tem certeza de que deseja excluir a viagem de código ${viagem.id}?`,
       [
         {
-          text: 'Cancelar',
-          style: 'cancel',
+          text: "Cancelar",
+          style: "cancel",
         },
         {
-          text: 'Ok',
+          text: "Ok",
           onPress: onPressDelete, // Chama a função onPressDelete se o usuário confirmar a exclusão
         },
       ],
@@ -38,16 +36,20 @@ export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.title}>
-          <Text numberOfLines={1} ellipsizeMode='tail'>
+          <Text numberOfLines={1} ellipsizeMode="tail">
             Local: {viagem.local}
           </Text>
-          <Text style={styles.Data} numberOfLines={1} ellipsizeMode='tail'>
-            Data: {viagem.data}
+          <Text style={styles.Data} numberOfLines={1} ellipsizeMode="tail">
+            Data: {viagem.data.toString()}
           </Text>
           {viagem.finalizado ? (
-            <Text style={styles.finalizado} numberOfLines={1} ellipsizeMode='tail'>Finalizado</Text>
+            <Text style={styles.finalizado} numberOfLines={1} ellipsizeMode="tail">
+              Finalizado
+            </Text>
           ) : (
-            <Text style={styles.finalizado} numberOfLines={1} ellipsizeMode='tail'>Aberto</Text>
+            <Text style={styles.finalizado} numberOfLines={1} ellipsizeMode="tail">
+              Aberto
+            </Text>
           )}
         </View>
       </View>
@@ -57,8 +59,8 @@ export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
             <MaterialIcons name="visibility" size={22} color="#6448B7" />
           </TouchableOpacity>
         </View>
-        ) : (
-          <View style={styles.button}>
+      ) : (
+        <View style={styles.button}>
           <TouchableOpacity onPress={onPressUpdate}>
             <MaterialIcons name="mode-edit" size={22} color="#6448B7" />
           </TouchableOpacity>
@@ -72,4 +74,3 @@ export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
     </View>
   );
 }
-

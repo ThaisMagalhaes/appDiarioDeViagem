@@ -31,7 +31,8 @@ export const styles = StyleSheet.create({
   Data: {
     color: '#888D97',
     fontSize: 13,
-    paddingRight: 40
+    paddingRight: 40,
+    width: '100%'
   },
   finalizado: {
     color: '#1967FB',

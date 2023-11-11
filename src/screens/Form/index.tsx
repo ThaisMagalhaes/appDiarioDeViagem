@@ -5,7 +5,7 @@ import { styles } from './styles';
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { HeaderForm } from '../../components/HeaderForm';
-import { DatabaseConnection } from '../../database/database-connection';
+import { DatabaseConnection } from '../../core/database';
 import DatePickerComponent from '../../components/DatePickerApp';
 
 const db = DatabaseConnection.getConnection();
