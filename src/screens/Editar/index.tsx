@@ -18,8 +18,8 @@ export function Editar() {
 
   const dados = route.params;
 
-  const [local, setLocal] = useState("");
-  const [finalizado, setFinalizado] = useState("0");
+  const [local, setLocal] = useState('');
+  const [finalizado, setFinalizado] = useState('0');
   const [dateValue, setDateValue] = useState('');
   const [checked, setChecked] = useState(false);
 
@@ -47,13 +47,13 @@ export function Editar() {
             console.log('Results', results.rowsAffected);
             if (results.rowsAffected > 0) {
               Toast.show({
-                type: "success",
-                text1: "Alterado com sucesso!"
+                type: 'success',
+                text1: 'Alterado com sucesso!',
               });
             } else {
               Toast.show({
-                type: "error",
-                text1: "Não foi possível alterar."
+                type: 'error',
+                text1: 'Não foi possível alterar.',
               });
             }
           }
@@ -62,39 +62,25 @@ export function Editar() {
     } catch (error) {
       console.error(error);
       Toast.show({
-        type: "error",
-        text1: "Não foi possível alterar."
+        type: 'error',
+        text1: 'Não foi possível alterar.',
       });
     }
-  }
+  };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <View style={styles.content}>
         <ScrollView>
-          <HeaderForm title='Editar Viagem' />
+          <HeaderForm title="Editar Viagem" />
           <View style={styles.form}>
-            <Input
-              label="Local"
-              onChangeText={setLocal}
-              value={local}
-            />
+            <Input label="Local" onChangeText={setLocal} value={local} />
             <DatePickerComponent valor={handleDateChange} />
 
-              <CheckBox
-                title="Finalizado"
-                checked={checked}
-                onPress={toggleCheckBox}
-              />
+            <CheckBox title="Finalizado" checked={checked} onPress={toggleCheckBox} />
           </View>
           <View style={styles.footer}>
-            <Button
-              title="Salvar"
-              onPress={handleAlterarViagem}
-            />
+            <Button title="Salvar" onPress={handleAlterarViagem} />
           </View>
         </ScrollView>
       </View>
