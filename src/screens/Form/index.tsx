@@ -11,8 +11,8 @@ import { DatePicker } from '../../components/DatePickerApp';
 const db = DatabaseConnection.getConnection();
 
 export function Form() {
-  const [local, setLocal] = useState("");
-  const [finalizado, setFinalizado] = useState("0");
+  const [local, setLocal] = useState('');
+  const [finalizado, setFinalizado] = useState('0');
   const [dateValue, setDateValue] = useState<Date>();
 
   const handleDateChange = (date: Date) => {
@@ -35,13 +35,13 @@ export function Form() {
             console.log('Results', results.rowsAffected);
             if (results.rowsAffected > 0) {
               Toast.show({
-                type: "success",
-                text1: "Cadastrado com sucesso!"
+                type: 'success',
+                text1: 'Cadastrado com sucesso!',
               });
             } else {
               Toast.show({
-                type: "error",
-                text1: "Não foi possível cadastrar."
+                type: 'error',
+                text1: 'Não foi possível cadastrar.',
               });
             }
           }
@@ -50,34 +50,23 @@ export function Form() {
     } catch (error) {
       console.error(error);
       Toast.show({
-        type: "error",
-        text1: "Não foi possível cadastrar."
+        type: 'error',
+        text1: 'Não foi possível cadastrar.',
       });
     }
-  }
+  };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
       <View style={styles.content}>
         <ScrollView>
-          <HeaderForm title='Cadastrar Viagem' />
+          <HeaderForm title="Cadastrar Viagem" />
           <View style={styles.form}>
-            <Input
-              label="Local"
-              onChangeText={setLocal}
-              value={local}
-            />
+            <Input label="Local" onChangeText={setLocal} value={local} />
             <DatePicker onChange={handleDateChange} />
-
           </View>
           <View style={styles.footer}>
-            <Button
-              title="Salvar"
-              onPress={handleRegisterViagem}
-            />
+            <Button title="Salvar" onPress={handleRegisterViagem} />
           </View>
         </ScrollView>
       </View>

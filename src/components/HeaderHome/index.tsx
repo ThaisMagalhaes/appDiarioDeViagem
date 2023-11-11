@@ -1,6 +1,6 @@
-import { Text, View, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import colors from 'tailwindcss/colors';
 
 export function HeaderHome() {
@@ -13,9 +13,7 @@ export function HeaderHome() {
   return (
     <View className="h-[178px] w-full flex-row items-center justify-between bg-roxoP px-6">
       <View>
-        <Text className="text-xl font-bold text-zinc-100">
-          Diário de Viagem App Pós
-        </Text>
+        <Text className="text-xl font-bold text-zinc-100">Diário de Viagem App Pós</Text>
       </View>
 
       <TouchableOpacity
