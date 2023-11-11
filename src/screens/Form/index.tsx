@@ -6,16 +6,16 @@ import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 import { HeaderForm } from '../../components/HeaderForm';
 import { DatabaseConnection } from '../../database/database-connection';
-import DatePickerComponent from '../../components/DatePickerApp';
+import { DatePicker } from '../../components/DatePickerApp';
 
 const db = DatabaseConnection.getConnection();
 
 export function Form() {
   const [local, setLocal] = useState("");
   const [finalizado, setFinalizado] = useState("0");
-  const [dateValue, setDateValue] = useState('');
+  const [dateValue, setDateValue] = useState<Date>();
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (date: Date) => {
     // A função de retorno de chamada para atualizar o valor do campo de data
     setDateValue(date);
   };
@@ -30,7 +30,7 @@ export function Form() {
       db.transaction(function (tx) {
         tx.executeSql(
           'INSERT INTO table_viagem (local, data, finalizado) VALUES (?,?,?)',
-          [local, dateValue, finalizado],
+          [local, dateValue.toLocaleDateString(), finalizado],
           (tx, results) => {
             console.log('Results', results.rowsAffected);
             if (results.rowsAffected > 0) {
@@ -70,7 +70,7 @@ export function Form() {
               onChangeText={setLocal}
               value={local}
             />
-            <DatePickerComponent valor={handleDateChange} />
+            <DatePicker onChange={handleDateChange} />
 
           </View>
           <View style={styles.footer}>

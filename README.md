@@ -21,7 +21,7 @@
 - [ ] Tela de cadastro de viagens
 
   - [ ] Permitir cadastrar e alterar os dados da viagem (Local, Data, Id)
-    - [ ] Criar componente datePicker
+    - [X] Criar componente datePicker
   - [ ] Exibir a lista de locais visitados
     - [ ] Listar locais em ordem cronologica
     - [ ] Cada item deve possuir o local visitado, data e um carrossel de imagens
