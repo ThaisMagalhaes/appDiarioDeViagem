@@ -21,6 +21,8 @@
     "@types/react": "~18.2.14",
     "date-fns": "^2.30.0",
     "expo": "^49.0.10",
+    "expo-av": "~13.4.1",
+    "expo-splash-screen": "~0.20.5",
     "expo-sqlite": "~11.3.3",
     "expo-status-bar": "~1.6.0",
     "i18n-js": "^4.3.2",

@@ -5,6 +5,7 @@ import { HeaderHome } from '../../components/HeaderHome';
 import { styles } from './styles';
 import { DatabaseConnection } from '../../database/database-connection';
 import { useNavigation } from '@react-navigation/native';
+import { FloatingButton } from '../../components/FloatingButton';
 
 const db = DatabaseConnection.getConnection();
 
@@ -97,6 +98,7 @@ export function Home() {
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderListItem}
       />
+      <FloatingButton />
     </View>
   );
 }
