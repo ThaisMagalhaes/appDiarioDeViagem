@@ -12,7 +12,7 @@ const db = DatabaseConnection.getConnection();
 
 export function Form() {
   const [local, setLocal] = useState('');
-  const [finalizado, setFinalizado] = useState('0');
+  const [finalizado] = useState('0');
   const [dateValue, setDateValue] = useState<Date>();
 
   const handleDateChange = (date: Date) => {

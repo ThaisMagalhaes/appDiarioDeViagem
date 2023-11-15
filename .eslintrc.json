@@ -1,4 +1,9 @@
 {
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "env": {
     "es2021": true,
     "node": true
@@ -37,8 +42,26 @@
     "react/prop-types": "off",
     "no-param-reassign": "off",
     "no-console": "off",
-    "@typescript-eslint/strict-boolean-expressions": "warn",
+    "tailwindcss/no-custom-classname": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
-    "@typescript-eslint/explicit-function-return-type": "off"
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-confusing-void-expression": "off",
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/no-magic-numbers": [
+      "error",
+      {
+          "ignoreArrayIndexes": true,
+          "ignoreDefaultValues": true,
+          "ignoreEnums": true,
+          "ignoreReadonlyClassProperties": true,
+          "ignoreNumericLiteralTypes": true,
+          "ignore": [
+              -1,
+              0,
+              1
+          ]
+      }
+    ]
   }
 }

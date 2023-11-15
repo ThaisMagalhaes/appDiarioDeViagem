@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#3D434D'
+    color: '#3D434D',
   },
   listHeader: {
     width: '100%',
@@ -22,19 +22,19 @@ export const styles = StyleSheet.create({
   },
   listCount: {
     color: '#888D97',
-    fontSize: 13
+    fontSize: 13,
   },
   list: {
     flex: 1,
-    width: '100%'
+    width: '100%',
   },
   listContent: {
     padding: 24,
-    paddingBottom: 150
+    paddingBottom: 150,
   },
   footer: {
     width: '100%',
     padding: 24,
-    marginBottom: getBottomSpace()
-  }
+    marginBottom: getBottomSpace(),
+  },
 });

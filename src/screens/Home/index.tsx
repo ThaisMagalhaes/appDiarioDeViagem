@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, View } from 'react-native';
-import { Card } from '../../components/Card';
-import { HeaderHome } from '../../components/HeaderHome';
+import { HeaderHome, Card } from '@components';
 import { styles } from './styles';
 import { DatabaseConnection } from '../../database/database-connection';
 import { useNavigation } from '@react-navigation/native';

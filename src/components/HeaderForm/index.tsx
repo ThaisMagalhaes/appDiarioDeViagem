@@ -8,22 +8,21 @@ import colors from 'tailwindcss/colors';
 type Props = {
   title: string;
 };
+const TOP_PADDING_HEADER = 24;
 
 export function HeaderForm({ title, ...rest }: Props) {
   const navigation = useNavigation();
 
   return (
     <View
-      className={`h-[110px] w-full bg-roxoP items-center justify-center flex-row p-6 pt-[${getStatusBarHeight() + 24
-        }] mb-6`}
-    >
+      className={`pt-[${
+        getStatusBarHeight() + TOP_PADDING_HEADER
+      }] mb-6 h-[110px] w-full flex-row items-center justify-center bg-roxoP p-6`}>
       <TouchableOpacity onPress={() => navigation.goBack()} className="z-50">
         <MaterialIcons name="chevron-left" size={32} color={colors.zinc[100]} />
       </TouchableOpacity>
 
-      <Text className="text-xl font-bold flex-1 text-center -ml-8 text-zinc-100">
-        {title}
-      </Text>
+      <Text className="-ml-8 flex-1 text-center text-xl font-bold text-zinc-100">{title}</Text>
     </View>
   );
 }

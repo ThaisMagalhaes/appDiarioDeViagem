@@ -1,6 +1,16 @@
 {
   "compilerOptions": {
-    "strictNullChecks": true
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": false,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/*"],
+      "@core/*": ["src/core/*"],
+      "@components/*": ["src/components/*"],
+      "@components": ["src/components/index"]
+    }
   },
   "extends": "expo/tsconfig.base"
 }

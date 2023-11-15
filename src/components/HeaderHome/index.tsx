@@ -18,8 +18,7 @@ export function HeaderHome() {
 
       <TouchableOpacity
         onPress={handleAdd}
-        className="h-14 w-14 items-center justify-center rounded border border-zinc-100"
-      >
+        className="h-14 w-14 items-center justify-center rounded border border-zinc-100">
         <MaterialIcons name="add" size={32} color={colors.zinc[100]} />
       </TouchableOpacity>
     </View>

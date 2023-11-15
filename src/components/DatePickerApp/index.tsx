@@ -1,10 +1,7 @@
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button } from '../Button';
+import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Mode = 'date' | 'time';
 
@@ -41,8 +38,7 @@ export function DatePicker({ onChange }: DatePickerProps) {
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={showDatepicker}
-            className="h-14 w-full justify-center rounded border border-zinc-200 bg-white px-4 py-2 text-lg focus:border-2 focus:border-violet-600"
-          >
+            className="h-14 w-full justify-center rounded border border-zinc-200 bg-white px-4 py-2 text-lg focus:border-2 focus:border-violet-600">
             <Text className="text-base">
               {date.toLocaleString('pt-BR', {
                 day: '2-digit',
@@ -54,13 +50,7 @@ export function DatePicker({ onChange }: DatePickerProps) {
         </View>
       </View>
       {show && (
-        <DateTimePicker
-          className="bg-zinc-50"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          onChange={handleChange}
-        />
+        <DateTimePicker className="bg-zinc-50" value={date} mode={mode} is24Hour={true} onChange={handleChange} />
       )}
     </SafeAreaView>
   );
