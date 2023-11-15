@@ -38,7 +38,7 @@ export function Card({ viagem, onPressDelete, onPressUpdate }: Props) {
             Local: {viagem.local}
           </Text>
           <Text className="pr-10 text-sm text-slate-400" numberOfLines={1} ellipsizeMode="tail">
-            Data: {viagem.data}
+            Data: {viagem.data?.toString()}
           </Text>
           {viagem.finalizado ? (
             <Text className="pr-10 text-base font-bold text-roxo" numberOfLines={1} ellipsizeMode="tail">
