@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 export const styles = StyleSheet.create({
   container: {
@@ -16,10 +15,8 @@ export const styles = StyleSheet.create({
   footer: {
     width: '100%',
     padding: 24,
-    marginBottom: getBottomSpace() + 24
   },
-  dateComponete:{
-    width: 350
-
-  }
+  dateComponete: {
+    width: 350,
+  },
 });

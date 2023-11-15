@@ -1,139 +1,57 @@
-import {
-  Text,
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
-import DatePicker from "react-native-modern-datepicker";
-import { getFormatedDate } from "react-native-modern-datepicker";
+import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { useState } from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function App({valor}) {
-  const [openStartDatePicker, setOpenStartDatePicker] = useState(false);
-  const today = new Date();
-  const startDate = getFormatedDate(
-    "DD/MM/YYYY"
-  );
-  const [selectedStartDate, setSelectedStartDate] = useState("");
-  const [startedDate, setStartedDate] = useState("12/12/2023");
+type Mode = 'date' | 'time';
 
-  function handleChangeStartDate(propDate) {
-    setStartedDate(propDate);
-    valor(propDate);
-  }
+type DatePickerProps = {
+  onChange?: (date: Date) => void;
+};
 
-  const handleOnPressStartDate = () => {
-    setOpenStartDatePicker(!openStartDatePicker);
+export function DatePicker({ onChange }: DatePickerProps) {
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState<Mode>('date');
+  const [show, setShow] = useState(false);
+
+  const handleChange = (event: DateTimePickerEvent, selectedDate: Date) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+    onChange && onChange(currentDate);
   };
+
+  const showMode = (currentMode: Mode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{
-          width: "100%",
-          height: "100%",
-          backgroundColor: "#fff",
-        }}
-      >
-        <View style={{ flex: 1, alignItems: "center" }}>
-
-          <View style={{ width: "100%", paddingHorizontal: 10
-          , marginTop: 10 }}>
-            <View>
-              <Text style={{ fontSize: 18 }}>Data</Text>
-              <TouchableOpacity
-                style={styles.inputBtn}
-                onPress={handleOnPressStartDate}
-              >
-                <Text>{selectedStartDate}</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Create modal for date picker */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={openStartDatePicker}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <DatePicker
-                  mode="calendar"
-                  minimumDate={startDate}
-                  selected={startedDate}
-                  onDateChanged={handleChangeStartDate}
-                  onSelectedChange={(date) => setSelectedStartDate(date)}
-                  locale={'pt-BR'}
-                  format="DD-MM-YYYY"
-                  options={{
-                    backgroundColor: "#080516",
-                    textHeaderColor: "#469ab6",
-                    textDefaultColor: "#FFFFFF",
-                    selectedTextColor: "#FFF",
-                    mainColor: "#469ab6",
-                    textSecondaryColor: "#FFFFFF",
-                    borderColor: "rgba(122, 146, 165, 0.1)",
-                  }}
-                />
-
-                <TouchableOpacity onPress={handleOnPressStartDate}>
-                  <Text style={{ color: "white" }}>Fechar</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
+    <SafeAreaView>
+      <View>
+        <View>
+          <Text className="mb-2 text-base text-zinc-500">Data</Text>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={showDatepicker}
+            className="h-14 w-full justify-center rounded border border-zinc-200 bg-white px-4 py-2 text-lg focus:border-2 focus:border-violet-600">
+            <Text className="text-base">
+              {date.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit',
+              })}
+            </Text>
+          </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
+      </View>
+      {show && (
+        <DateTimePicker className="bg-zinc-50" value={date} mode={mode} is24Hour={true} onChange={handleChange} />
+      )}
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  textHeader: {
-    fontSize: 36,
-    marginVertical: 60,
-    color: "#111",
-  },
-  textSubHeader: {
-    fontSize: 25,
-    color: "#111",
-  },
-  inputBtn: {
-    borderWidth: 1,
-    borderRadius: 4,
-    borderColor: "#222",
-    height: 50,
-    paddingLeft: 8,
-    fontSize: 18,
-    justifyContent: "center",
-    marginTop: 5,
-    marginBottom: 10,
-  },
-  centeredView: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "#080516",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 20,
-    padding: 35,
-    width: "90%",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-});

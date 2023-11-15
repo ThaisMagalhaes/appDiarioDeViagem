@@ -1,36 +1,25 @@
-import { Text, View, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
-
-import { styles } from './styles';
+import { useNavigation } from '@react-navigation/native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import colors from 'tailwindcss/colors';
 
 export function HeaderHome() {
   const navigation = useNavigation();
 
   function handleAdd() {
-    navigation.navigate("Form", {});
+    navigation.navigate('Form', {});
   }
 
   return (
-    <View style={styles.container}>
-      
-
-      <View style={styles.user}>
-        <Text style={styles.title}>
-         Diário de Viagem App Pós
-        </Text>
+    <View className="h-[178px] w-full flex-row items-center justify-between bg-roxoP px-6">
+      <View>
+        <Text className="text-xl font-bold text-zinc-100">Diário de Viagem App Pós</Text>
       </View>
-
 
       <TouchableOpacity
         onPress={handleAdd}
-        style={styles.button}
-      >
-        <MaterialIcons
-          name="add"
-          size={22}
-          color="#FFF"
-        />
+        className="h-14 w-14 items-center justify-center rounded border border-zinc-100">
+        <MaterialIcons name="add" size={32} color={colors.zinc[100]} />
       </TouchableOpacity>
     </View>
   );

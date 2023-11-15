@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, View } from 'react-native';
-import { Card } from '../../components/Card';
-import { HeaderHome } from '../../components/HeaderHome';
+import { HeaderHome, Card } from '@components';
 import { styles } from './styles';
 import { DatabaseConnection } from '../../database/database-connection';
 import { useNavigation } from '@react-navigation/native';
@@ -14,17 +13,13 @@ export function Home() {
 
   const loadDataFromDatabase = () => {
     db.transaction((tx) => {
-      tx.executeSql(
-        'SELECT * FROM table_viagem ORDER BY id DESC',
-        [],
-        (tx, results) => {
-          const temp = [];
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-          }
-          setFlatListItems(temp);
+      tx.executeSql('SELECT * FROM table_viagem ORDER BY id DESC', [], (tx, results) => {
+        const temp = [];
+        for (let i = 0; i < results.rows.length; ++i) {
+          temp.push(results.rows.item(i));
         }
-      );
+        setFlatListItems(temp);
+      });
     });
   };
 
@@ -48,46 +43,46 @@ export function Home() {
     loadDataFromDatabase();
   }, [loadDataFromDatabase]);
 
-  
-
   const handleRemove = (id) => {
     db.transaction((tx) => {
-      tx.executeSql(
-        'DELETE FROM table_viagem WHERE id=?',
-        [id],
-        (tx, results) => {
-          console.log('Delete Result:', results.rowsAffected);
-          if (results.rowsAffected > 0) {
-            Alert.alert(
-              'Sucesso',
-              'Viagem excluída com sucesso!',
-              [
-                {
-                  text: 'Ok',
-                },
-              ],
-              { cancelable: false }
-            );
-            loadDataFromDatabase(); // Reload data after deletion
-          } else {
-            Alert.alert('Erro', 'Por favor, entre com um código de viagem válido!');
-          }
+      tx.executeSql('DELETE FROM table_viagem WHERE id=?', [id], (tx, results) => {
+        console.log('Delete Result:', results.rowsAffected);
+        if (results.rowsAffected > 0) {
+          Alert.alert(
+            'Sucesso',
+            'Viagem excluída com sucesso!',
+            [
+              {
+                text: 'Ok',
+              },
+            ],
+            { cancelable: false }
+          );
+          loadDataFromDatabase(); // Reload data after deletion
+        } else {
+          Alert.alert('Erro', 'Por favor, entre com um código de viagem válido!');
         }
-      );
+      });
     });
   };
 
   const handleUpdate = (obj) => {
-
     if (obj.finalizado === 0) {
-      navigation.navigate("Editar", { dados: obj });
+      navigation.navigate('Editar', { dados: obj });
     }
-
   };
 
   const renderListItem = ({ item }) => (
     <View style={styles.container}>
-      <Card viagem={item} onPressDelete={() => handleRemove(item.id)} onPressUpdate={() => handleUpdate(item)} />
+      <Card
+        viagem={item}
+        onPressDelete={() => {
+          handleRemove(item.id);
+        }}
+        onPressUpdate={() => {
+          handleUpdate(item);
+        }}
+      />
     </View>
   );
 
