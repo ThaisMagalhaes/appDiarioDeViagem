@@ -5,7 +5,7 @@ import { ViagemModel, ViagemEntradaModel } from './models';
 const entities = [ViagemModel, ViagemEntradaModel];
 
 export const databaseConfiguration: DataSourceOptions = {
-  database: 'diarioviagem2.db',
+  database: 'diarioviagem.db',
   type: 'expo',
   driver: SQLite,
   entities,
