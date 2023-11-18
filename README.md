@@ -1,9 +1,9 @@
 # Features
 
-- [ ] Configuração do Projeto
+- [x] Configuração do Projeto
   - [X] Configurar Prettier, Eslint e EditorConfig
   - [X] Configurar TailwindCSS
-  - [ ] Configurar Banco de Dados Local (Sqlite e/ou TypeORM)
+  - [x] Configurar Banco de Dados Local (Sqlite e/ou TypeORM)
 
 - [ ] Autenticação Local
   - [ ] Cadastrar um senha localmente na primeira inicialização do app
@@ -78,3 +78,14 @@ O aplicativo deve ser desenvolvido em duas versões, uma utilizando o framework 
 #### RNF02 - Facilidade de uso
 
 O aplicativo deve possuir interface com o usuário amigável e de fácil utilização. As decisões a serem tomadas para a construção da interface e a coleta dos dados devem sempre considerar a usabilidade do e a satisfação do usuário. Uma vez na tela inicial do aplicativo, espera-se que usuários não gastem mais que 2 toques para iniciar um cadastro, 5 toques para realizar uma remoção, 3 toques parar iniciar uma atualização e 2 toques para iniciar uma visualização.
+
+## Referecias
+
+- [Configurar Typescript Paths](https://reactnative.dev/docs/typescript)
+- [Configurar TypeORM](https://dev.to/jgabriel1/expo-sqlite-typeorm-4mn8)
+- [Configurar TypeORM](https://github.com/DeividFrancis/poc-expo-typeorm/)
+- [Documentação TypeORM](https://typeorm.io/)
+- [EsLint, Prettier](https://www.youtube.com/watch?v=e_nJ5DxZ900)
+- [TailWindCSS React Native](https://www.nativewind.dev/)
+- [Criar Logo](https://designs.ai/logomaker)
+- [Relacionamentos Utilizando TypeORM](https://www.tabnews.com.br/HenriqueSchroeder/relacionamentos-no-typeorm)

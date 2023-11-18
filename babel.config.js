@@ -5,6 +5,7 @@ module.exports = function (api) {
     plugins: [
       'nativewind/babel',
       '@babel/transform-react-jsx-source',
+      'babel-plugin-transform-typescript-metadata',
       [
         'module-resolver',
         {
