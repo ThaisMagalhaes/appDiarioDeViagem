@@ -1,14 +1,19 @@
 import { Text, TextInput, type TextInputProps, View } from 'react-native';
+import { theme } from 'utils/theme';
 
 type Props = TextInputProps & {
   label: string;
 };
 
-export function Input({ label, ...rest }: Props) {
+export function Input({ label, className, ...rest }: Props) {
   return (
-    <View className="mb-4 w-full">
-      <Text className="mb-2 text-base text-slate-200">{label}</Text>
-      <TextInput className="h-14 w-full rounded border border-slate-300 bg-slate-100 pl-6" {...rest} />
+    <View className="mb-5 w-full">
+      <Text className="mb-2 text-base text-azul-600">{label}</Text>
+      <TextInput
+        placeholderTextColor={theme.colors.azul[700]}
+        className={`w-full rounded border border-azul-700 bg-azul-900 p-3 text-lg text-azul-100 focus:border-azul-600 ${className}`}
+        {...rest}
+      />
     </View>
   );
 }
