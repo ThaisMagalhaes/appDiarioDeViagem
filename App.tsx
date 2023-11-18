@@ -1,8 +1,11 @@
 import 'reflect-metadata';
+import 'react-native-gesture-handler';
+import { useDatabaseInitialize } from 'hooks/useDatabaseInitialize';
+import { Text, View, LogBox } from 'react-native';
 import Toast from 'react-native-toast-message';
 import { Routes } from './src/routes';
-import { useDatabaseInitialize } from 'hooks/useDatabaseInitialize';
-import { Text, View } from 'react-native';
+
+LogBox.ignoreLogs(['Failed prop type:']);
 
 export default function App() {
   const { ready } = useDatabaseInitialize();
