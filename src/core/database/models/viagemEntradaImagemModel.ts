@@ -1,0 +1,15 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { ViagemEntradaModel } from './viagemEntradaModel';
+
+@Entity('viagem_entrada_imagens')
+export class ViagemEntradaImagemModel {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ length: 300 })
+  caminho: string;
+
+  @ManyToOne(() => ViagemEntradaModel, (entrada) => entrada.imagens)
+  @JoinColumn({ name: 'viagemEntradaId' })
+  viagemEntrada: ViagemEntradaModel;
+}

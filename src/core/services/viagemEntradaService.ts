@@ -10,7 +10,7 @@ export class ViagemEntradaService {
     return await this.viagemEntradaRepository.criar(viagemEntrada);
   }
 
-  async obterTodas() {
+  async obterTodas(local?: string) {
     return await this.viagemEntradaRepository.obterTodas();
   }
 
