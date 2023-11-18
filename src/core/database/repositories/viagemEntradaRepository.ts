@@ -18,8 +18,12 @@ export class ViagemEntradaRepository implements IViagemEntradaRepository {
     return await this.repository.save(novaViagemEntrada);
   }
 
-  async obterTodas(): Promise<ViagemEntradaModel[]> {
-    return await this.repository.find();
+  async obterTodas(localFiltro?: string): Promise<ViagemEntradaModel[]> {
+    if (localFiltro) {
+      return await this.repository.find({ where: { local: localFiltro } });
+    } else {
+      return await this.repository.find();
+    }
   }
 
   async alterar(viagemEntradaAtualizada: Partial<ViagemEntradaModel>): Promise<ViagemEntradaModel | undefined> {
