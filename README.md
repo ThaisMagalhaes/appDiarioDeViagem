@@ -88,3 +88,4 @@ O aplicativo deve possuir interface com o usuário amigável e de fácil utiliza
 - [EsLint, Prettier](https://www.youtube.com/watch?v=e_nJ5DxZ900)
 - [TailWindCSS React Native](https://www.nativewind.dev/)
 - [Criar Logo](https://designs.ai/logomaker)
+- [Relacionamentos Utilizando TypeORM](https://www.tabnews.com.br/HenriqueSchroeder/relacionamentos-no-typeorm)

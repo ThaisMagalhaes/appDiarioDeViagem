@@ -1,4 +1,5 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity, OneToMany } from 'typeorm';
+import { ViagemEntradaModel } from './viagemEntradaModel';
 
 @Entity('viagens')
 export class ViagemModel {
@@ -10,4 +11,10 @@ export class ViagemModel {
 
   @Column({ type: 'date' })
   data: Date;
+
+  @Column({ default: false })
+  finalizado: boolean;
+
+  @OneToMany(() => ViagemEntradaModel, (entrada) => entrada.viagem)
+  entradas: ViagemEntradaModel[];
 }

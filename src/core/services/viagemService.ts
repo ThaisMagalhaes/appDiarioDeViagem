@@ -13,4 +13,12 @@ export class ViagemService {
   async obterTodas() {
     return await this.viagemRepository.obterTodas();
   }
+
+  async alterar(id: number, viagemAtualizada: Partial<ViagemModel>): Promise<ViagemModel | undefined> {
+    return await this.viagemRepository.alterar(id, viagemAtualizada);
+  }
+
+  async excluir(id: number): Promise<boolean> {
+    return await this.viagemRepository.excluir(id);
+  }
 }
