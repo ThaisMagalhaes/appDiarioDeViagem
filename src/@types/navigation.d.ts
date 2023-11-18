@@ -6,7 +6,12 @@ export declare global {
   namespace ReactNavigation {
     interface RootParamList {
       Home: undefined;
-      Form: FormNavigationProps;
+      CadastrarViagemForm: FormNavigationProps;
+      AlterarViagemForm: FormNavigationProps;
+      ConsultarViagemForm: FormNavigationProps;
+      CadastrarEntrada: FormNavigationProps;
+      ConsultarEntrada: FormNavigationProps;
+      AlterarEntrada: FormNavigationProps;
     }
   }
 }
