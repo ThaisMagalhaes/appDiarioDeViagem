@@ -22,15 +22,8 @@ export class ViagemEntradaRepository implements IViagemEntradaRepository {
     return await this.repository.find();
   }
 
-  async alterar(
-    id: number,
-    viagemEntradaAtualizada: Partial<ViagemEntradaModel>
-  ): Promise<ViagemEntradaModel | undefined> {
-    const viagemEntradaOriginal = await this.repository.findOne({ where: { id } });
-
-    if (!viagemEntradaOriginal) {
-      return undefined;
-    }
+  async alterar(viagemEntradaAtualizada: Partial<ViagemEntradaModel>): Promise<ViagemEntradaModel | undefined> {
+    const viagemEntradaOriginal = await this.repository.findOneOrFail({ where: { id: viagemEntradaAtualizada.id } });
 
     // Atualiza os campos desejados da viagem com os valores fornecidos
     Object.assign(viagemEntradaOriginal, viagemEntradaAtualizada);
@@ -39,11 +32,7 @@ export class ViagemEntradaRepository implements IViagemEntradaRepository {
   }
 
   async excluir(id: number): Promise<boolean> {
-    const viagemEntradaExistente = await this.repository.findOne({ where: { id } });
-
-    if (!viagemEntradaExistente) {
-      return false;
-    }
+    const viagemEntradaExistente = await this.repository.findOneOrFail({ where: { id } });
 
     await this.repository.remove(viagemEntradaExistente);
     return true;

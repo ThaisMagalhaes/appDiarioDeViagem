@@ -10,7 +10,6 @@ export class ViagemRepository implements IViagemRepository {
   }
 
   async criar(viagem: Partial<ViagemModel>): Promise<ViagemModel> {
-    console.log('repositorio', viagem);
     const novaViagem = this.repository.create({
       data: viagem.data,
       local: viagem.local,
@@ -23,12 +22,8 @@ export class ViagemRepository implements IViagemRepository {
     return await this.repository.find();
   }
 
-  async alterar(id: number, viagemAtualizada: Partial<ViagemModel>): Promise<ViagemModel | undefined> {
-    const viagemOriginal = await this.repository.findOne({ where: { id } });
-
-    if (!viagemOriginal) {
-      return undefined;
-    }
+  async alterar(viagemAtualizada: Partial<ViagemModel>): Promise<ViagemModel | undefined> {
+    const viagemOriginal = await this.repository.findOneOrFail({ where: { id: viagemAtualizada.id } });
 
     // Atualiza os campos desejados da viagem com os valores fornecidos
     Object.assign(viagemOriginal, viagemAtualizada);
@@ -37,11 +32,7 @@ export class ViagemRepository implements IViagemRepository {
   }
 
   async excluir(id: number): Promise<boolean> {
-    const viagemExistente = await this.repository.findOne({ where: { id } });
-
-    if (!viagemExistente) {
-      return false;
-    }
+    const viagemExistente = await this.repository.findOneOrFail({ where: { id } });
 
     await this.repository.remove(viagemExistente);
     return true;

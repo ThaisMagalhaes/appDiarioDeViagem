@@ -18,7 +18,7 @@ export class ViagemEntradaService {
     id: number,
     viagemEntradaAtualizada: Partial<ViagemEntradaModel>
   ): Promise<ViagemEntradaModel | undefined> {
-    return await this.viagemEntradaRepository.alterar(id, viagemEntradaAtualizada);
+    return await this.viagemEntradaRepository.alterar(viagemEntradaAtualizada);
   }
 
   async excluir(id: number): Promise<boolean> {

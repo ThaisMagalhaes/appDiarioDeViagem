@@ -5,7 +5,7 @@ export interface IViagemRepository {
 
   obterTodas(): Promise<ViagemModel[]>;
 
-  alterar(id: number, viagem: Partial<ViagemModel>): Promise<ViagemModel>;
+  alterar(viagem: Partial<ViagemModel>): Promise<ViagemModel>;
 
   excluir(id: number): Promise<boolean>;
 }

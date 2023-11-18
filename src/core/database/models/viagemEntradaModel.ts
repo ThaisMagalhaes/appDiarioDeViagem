@@ -9,7 +9,7 @@ export class ViagemEntradaModel {
   @Column({ length: 150 })
   local: string;
 
-  @Column({ length: 500 })
+  @Column({ length: Number.MAX_VALUE })
   descricao: string;
 
   @Column({ type: 'date' })
