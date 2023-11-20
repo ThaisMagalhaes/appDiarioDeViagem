@@ -6,7 +6,7 @@ export class ViagemEntradaImagemModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 300 })
+  @Column({ length: 512 })
   caminho: string;
 
   @ManyToOne(() => ViagemEntradaModel, (entrada) => entrada.imagens)
