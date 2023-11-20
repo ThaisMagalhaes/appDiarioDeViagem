@@ -1,8 +1,8 @@
 import * as SQLite from 'expo-sqlite';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { ViagemModel, ViagemEntradaModel } from './models';
+import { ViagemModel, ViagemEntradaModel, ViagemEntradaImagemModel } from './models';
 
-const entities = [ViagemModel, ViagemEntradaModel];
+const entities = [ViagemModel, ViagemEntradaModel, ViagemEntradaImagemModel];
 
 export const databaseConfiguration: DataSourceOptions = {
   database: 'diarioviagem.db',

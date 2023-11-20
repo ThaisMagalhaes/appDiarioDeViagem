@@ -1,5 +1,6 @@
-import { PrimaryGeneratedColumn, Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { ViagemModel } from './viagemModel';
+import { ViagemEntradaImagemModel } from './viagemEntradaImagemModel';
 
 @Entity('viagem_entradas')
 export class ViagemEntradaModel {
@@ -18,4 +19,7 @@ export class ViagemEntradaModel {
   @ManyToOne(() => ViagemModel, (viagem) => viagem.entradas)
   @JoinColumn({ name: 'viagemId' })
   viagem: ViagemModel;
+
+  @OneToMany(() => ViagemEntradaImagemModel, (imagem) => imagem.viagemEntrada)
+  imagens: ViagemEntradaImagemModel[];
 }
