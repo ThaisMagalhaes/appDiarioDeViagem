@@ -1,9 +1,9 @@
-import 'reflect-metadata';
-import 'react-native-gesture-handler';
-import { useDatabaseInitialize } from 'hooks/useDatabaseInitialize';
-import { Text, View, LogBox } from 'react-native';
-import { Routes } from './src/routes';
+import { LogBox } from 'react-native';
 import { RootSiblingParent } from 'react-native-root-siblings';
+import 'reflect-metadata';
+import { Splash } from 'screens/Splash';
+import { Routes } from './src/routes';
+import * as SplashScreen from 'expo-splash-screen';
 
 LogBox.ignoreLogs([
   'Failed prop type:',
@@ -11,19 +11,14 @@ LogBox.ignoreLogs([
   'Require cycle: src\\core\\database\\models',
 ]);
 
-export default function App() {
-  const { ready } = useDatabaseInitialize();
+void SplashScreen.preventAutoHideAsync().catch(console.warn);
 
-  if (!ready) {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
+export default function App() {
   return (
-    <RootSiblingParent>
-      <Routes />
-    </RootSiblingParent>
+    <Splash>
+      <RootSiblingParent>
+        <Routes />
+      </RootSiblingParent>
+    </Splash>
   );
 }
