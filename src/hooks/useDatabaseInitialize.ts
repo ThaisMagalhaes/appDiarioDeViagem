@@ -16,6 +16,8 @@ export function useDatabaseInitialize() {
           console.log('Erro on database initialize', e);
           setReady(false);
         });
+    } else {
+      setReady(connection.isInitialized);
     }
 
     return () => {
