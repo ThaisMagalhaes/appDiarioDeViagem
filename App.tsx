@@ -2,10 +2,14 @@ import 'reflect-metadata';
 import 'react-native-gesture-handler';
 import { useDatabaseInitialize } from 'hooks/useDatabaseInitialize';
 import { Text, View, LogBox } from 'react-native';
-import Toast from 'react-native-toast-message';
 import { Routes } from './src/routes';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
-LogBox.ignoreLogs(['Failed prop type:']);
+LogBox.ignoreLogs([
+  'Failed prop type:',
+  'Key "cancelled" in the image picker',
+  'Require cycle: src\\core\\database\\models',
+]);
 
 export default function App() {
   const { ready } = useDatabaseInitialize();
@@ -18,9 +22,8 @@ export default function App() {
     );
   }
   return (
-    <>
+    <RootSiblingParent>
       <Routes />
-      <Toast />
-    </>
+    </RootSiblingParent>
   );
 }
