@@ -1,15 +1,15 @@
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Mode = 'date' | 'time';
 
 type DatePickerProps = {
   onChange?: (date: Date) => void;
-  habilitarAlteracao?: boolean;
 };
 
-export function DatePicker({ onChange, habilitarAlteracao = true }: DatePickerProps) {
+export function DatePicker({ onChange }: DatePickerProps) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState<Mode>('date');
   const [show, setShow] = useState(false);
@@ -27,28 +27,31 @@ export function DatePicker({ onChange, habilitarAlteracao = true }: DatePickerPr
   };
 
   const showDatepicker = () => {
-    if (!habilitarAlteracao) {
-      return;
-    }
     showMode('date');
   };
 
   return (
-    <View className="mb-5">
-      <Text className="mb-2 text-base text-azul-600">Data</Text>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={showDatepicker}
-        className="w-full rounded border border-azul-700 bg-azul-900 p-3 text-lg focus:border-azul-600">
-        <Text className="py-1 text-base text-azul-100">
-          {date?.toLocaleString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: '2-digit',
-          })}
-        </Text>
-      </TouchableOpacity>
-      {show && <DateTimePicker value={date} mode={mode} is24Hour={true} onChange={handleChange} />}
-    </View>
+    <SafeAreaView>
+      <View>
+        <View>
+          <Text className="mb-2 text-base text-zinc-500">Data</Text>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={showDatepicker}
+            className="h-14 w-full justify-center rounded border border-zinc-200 bg-white px-4 py-2 text-lg focus:border-2 focus:border-violet-600">
+            <Text className="text-base">
+              {date.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: '2-digit',
+              })}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      {show && (
+        <DateTimePicker className="bg-zinc-50" value={date} mode={mode} is24Hour={true} onChange={handleChange} />
+      )}
+    </SafeAreaView>
   );
 }

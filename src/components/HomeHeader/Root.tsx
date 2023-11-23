@@ -2,7 +2,7 @@ import Constants from 'expo-constants';
 import { type ReactNode } from 'react';
 import { View } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { MAX_HEADER_HEIGHT } from 'utils/contants';
+import { MAX_HEADER_HEIGHT } from './useHeaderStyles';
 
 type HeaderProps = {
   children?: ReactNode;
@@ -20,7 +20,7 @@ export function Root({ headerStyles, imageStyles, children }: HeaderProps) {
         source={require('../../../assets/images/mountain.png')}
       />
       <View
-        className="absolute h-full max-h-14 w-full flex-row items-center justify-end px-3"
+        className="absolute h-full max-h-14 w-full flex-row items-center justify-end px-4"
         style={{ marginTop: Constants.statusBarHeight }}>
         {children}
       </View>

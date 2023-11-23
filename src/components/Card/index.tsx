@@ -8,7 +8,7 @@ type Viagem = {
   id: number;
   local: string;
   data: Date;
-  finalizado?: boolean;
+  finalizado: boolean;
 };
 
 type Props = {
@@ -18,9 +18,7 @@ type Props = {
   viagem: Viagem;
   selecionado?: boolean;
   habilitarSelecao?: boolean;
-  desabilitarAnimacaoEntrada?: boolean;
   onSelecionarViagem?: (viagem: Viagem) => void;
-  onClique?: (viagem: Viagem) => void;
 };
 
 export const TEMPO_ESPERA_ANIMACAO_EM_MILISEGUNDOS = 100;
@@ -32,9 +30,7 @@ export function Card({
   habilitarSelecao,
   viagem,
   onSelecionarViagem,
-  onClique,
   exibirAnoViagem = false,
-  desabilitarAnimacaoEntrada = false,
 }: Props) {
   function handleSelecionarItem() {
     if (!habilitarSelecao) {
@@ -45,21 +41,13 @@ export function Card({
   function handleClique() {
     if (habilitarSelecao) {
       onSelecionarViagem && onSelecionarViagem(viagem);
-    } else {
-      onClique && onClique(viagem);
     }
   }
 
   return (
     <Animated.View
       className="mb-3"
-      entering={
-        initialMode
-          ? !desabilitarAnimacaoEntrada
-            ? ZoomIn.delay(TEMPO_ESPERA_ANIMACAO_EM_MILISEGUNDOS * posicao)
-            : undefined
-          : ZoomIn
-      }
+      entering={initialMode ? ZoomIn.delay(TEMPO_ESPERA_ANIMACAO_EM_MILISEGUNDOS * posicao) : ZoomIn}
       exiting={SlideOutLeft}>
       <GestureHandlerRootView>
         {exibirAnoViagem && (

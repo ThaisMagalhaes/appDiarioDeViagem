@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, SafeAreaView } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import Animated, { Layout } from 'react-native-reanimated';
 import { FloatingButton, HomeHeader, Card, useHomeHeaderStyles } from '@components';
+
 const list = [
   {
     id: 1,
@@ -27,7 +28,8 @@ export function Home() {
   const [viagensSelecionadas, setViagensSelecionadas] = useState<Map<number, boolean>>(new Map<number, boolean>());
   const [abrirInputPesquisa, setAbrirInputPesquisa] = useState(false);
 
-  const { scrollY, headerImageStyles, headerStyles, iconStyle, scrollHandler, voltarIconStyle } = useHomeHeaderStyles();
+  const { scrollY, searchAnimation, headerImageStyles, headerStyles, iconStyle, scrollHandler, voltarIconStyle } =
+    useHomeHeaderStyles();
 
   const initialMode = useRef<boolean>(true);
 
@@ -38,11 +40,13 @@ export function Home() {
   const existeItensSelecionados = viagensSelecionadas.size > 0;
 
   function handleFecharInputPesquisa() {
+    searchAnimation.value = false;
     setAbrirInputPesquisa(false);
   }
 
   function handleAbrirInputPesquisa() {
     setAbrirInputPesquisa(true);
+    searchAnimation.value = true;
   }
 
   function handleSelecionarViagem(viagem) {
@@ -92,13 +96,12 @@ export function Home() {
         selecionado={!!viagensSelecionadas.get(item.id)}
         habilitarSelecao={existeItensSelecionados}
         onSelecionarViagem={handleSelecionarViagem}
-        onClique={() => navigation.navigate('ConsultarViagemForm')}
       />
     );
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-azul-900">
+    <View className="flex-1 bg-azul-900">
       <HomeHeader.Root headerStyles={headerStyles} imageStyles={headerImageStyles}>
         {existeItensSelecionados && (
           <HomeHeader.DeleteContent
@@ -114,6 +117,7 @@ export function Home() {
             exibirPesquisa={abrirInputPesquisa}
             iconStyle={iconStyle}
             scrollY={scrollY}
+            searchAnimation={searchAnimation}
             onFecharInput={handleFecharInputPesquisa}
             onAbrirInput={handleAbrirInputPesquisa}
             onPesquisar={handlePesquisarViagens}
@@ -132,7 +136,7 @@ export function Home() {
         scrollEventThrottle={1}
         onScroll={scrollHandler}
       />
-      <FloatingButton onPress={() => navigation.navigate('CadastrarViagemForm', {})} />
-    </SafeAreaView>
+      <FloatingButton onPress={() => navigation.navigate('Form', {})} />
+    </View>
   );
 }

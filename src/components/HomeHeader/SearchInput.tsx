@@ -1,6 +1,6 @@
 import MaterialIcon from '@expo/vector-icons/MaterialIcons';
-import { useEffect, useState } from 'react';
-import { TextInput, View, Dimensions } from 'react-native';
+import { useState } from 'react';
+import { TextInput, View } from 'react-native';
 import { GestureHandlerRootView, TouchableNativeFeedback } from 'react-native-gesture-handler';
 import Animated, {
   Easing,
@@ -10,10 +10,9 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
   type SharedValue,
-  useSharedValue,
 } from 'react-native-reanimated';
 import { theme } from 'utils/theme';
-import { MAX_HEADER_HEIGHT } from 'utils/contants';
+import { MAX_HEADER_HEIGHT } from './useHeaderStyles';
 
 const AnimatedMaterialIcon = Animated.createAnimatedComponent(MaterialIcon);
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
@@ -23,6 +22,7 @@ export type SearchInputProps = {
   onAbrirInput?: () => void;
   onPesquisar?: (pesquisa: string) => void;
   exibirPesquisa: boolean;
+  searchAnimation: SharedValue<boolean>;
   scrollY: SharedValue<number>;
   iconStyle: any;
   voltarIconStyle: any;
@@ -30,12 +30,9 @@ export type SearchInputProps = {
 
 const HORIZONTAL_PADDING = 12;
 
-/** Esse tamanho é calculado a partir do tamanho do botão voltar 32px + padding e margens utilizados */
-const TAMANHO_A_SER_REMOVIDO_DO_INPUT = 64;
-const TAMANHO_MAXIMO_INPUT_PESQUISA = Dimensions.get('window').width - TAMANHO_A_SER_REMOVIDO_DO_INPUT;
-
 export function SearchInput({
   exibirPesquisa,
+  searchAnimation,
   scrollY,
   iconStyle,
   voltarIconStyle,
@@ -44,17 +41,6 @@ export function SearchInput({
   onPesquisar,
 }: SearchInputProps) {
   const [inputText, setInputText] = useState('');
-  const searchAnimation = useSharedValue(0);
-
-  useEffect(() => {
-    searchAnimation.value = exibirPesquisa ? TAMANHO_MAXIMO_INPUT_PESQUISA : 0;
-  }, [exibirPesquisa]);
-
-  const searchContainerInput = useAnimatedStyle(() => {
-    return {
-      width: withTiming(searchAnimation.value, { duration: 200, easing: Easing.ease }),
-    };
-  });
 
   const searchInput = useAnimatedStyle(() => {
     return {
@@ -66,11 +52,19 @@ export function SearchInput({
         [theme.colors.azul[900], theme.colors.azul[600]]
       ),
       paddingHorizontal: interpolate(
-        searchAnimation.value,
-        [TAMANHO_MAXIMO_INPUT_PESQUISA, 0],
+        Number(!searchAnimation.value),
+        [0, 1],
         [HORIZONTAL_PADDING, 0],
         Extrapolation.CLAMP
       ),
+    };
+  });
+
+  const searchContainerInput = useAnimatedStyle(() => {
+    return {
+      width: searchAnimation.value
+        ? withTiming('100%', { duration: 200, easing: Easing.ease })
+        : withTiming(0, { duration: 200, easing: Easing.ease }),
     };
   });
 

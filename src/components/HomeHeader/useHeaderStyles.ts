@@ -6,26 +6,48 @@ import {
   interpolate,
   Extrapolation,
 } from 'react-native-reanimated';
-import {
-  BOTTOM_MARGIN_VALUE_WHEN_HEADER_IS_EXPANDED,
-  HEADER_IMAGE_OPACITY,
-  MAX_HEADER_HEIGHT,
-  MIN_HEADER_HEIGHT,
-} from 'utils/contants';
+import Constants from 'expo-constants';
 import { theme } from 'utils/theme';
+
+/** Opacidade da imagem quando o header estiver expandido */
+const IMAGE_OPACITY = 0.9;
+
+/** Altura padrão do header */
+const HEADER_HEIGHT = 56;
+
+/** Altura do cabeçalho quando estiver expadido */
+const EXPANDED_HEADER_HEIGHT = 160;
+
+/** Valor da margem inferior quando o header estiver expandido */
+const BOTTOM_MARGIN_VALUE_WHEN_HEADER_IS_EXPANDED = 16;
+
+/** A altura minima do header é composta pela altura padrão do header + altura da barra de status do dispositivo */
+export const MIN_HEADER_HEIGHT = HEADER_HEIGHT + Constants.statusBarHeight;
+
+/** A altura máxima do header é composta pela altura do header expandido + altura da barra de status do dispositivo */
+export const MAX_HEADER_HEIGHT = EXPANDED_HEADER_HEIGHT + Constants.statusBarHeight;
 
 export function useHomeHeaderStyles() {
   const scrollY = useSharedValue(0);
+  const searchAnimation = useSharedValue(false);
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
   });
 
   const iconStyle = useAnimatedStyle(() => {
+    const searchInputAnimation = Number(searchAnimation.value);
+
+    const indexCorAzulEscuro = 800;
+    const indexCorAzulClaro = 50;
+
     const color = interpolateColor(
       scrollY.value,
       [0, MAX_HEADER_HEIGHT],
-      [theme.colors.azul[500], theme.colors.azul[600]]
+      [
+        theme.colors.azul[interpolate(searchInputAnimation, [0, 1], [indexCorAzulClaro, indexCorAzulEscuro])],
+        theme.colors.azul[600],
+      ]
     );
 
     return {
@@ -90,12 +112,13 @@ export function useHomeHeaderStyles() {
         [MAX_HEADER_HEIGHT, MIN_HEADER_HEIGHT],
         Extrapolation.CLAMP
       ),
-      opacity: interpolate(scrollY.value, [0, MAX_HEADER_HEIGHT], [HEADER_IMAGE_OPACITY, 0], Extrapolation.CLAMP),
+      opacity: interpolate(scrollY.value, [0, MAX_HEADER_HEIGHT], [IMAGE_OPACITY, 0], Extrapolation.CLAMP),
     };
   });
 
   return {
     scrollY,
+    searchAnimation,
     voltarIconStyle,
     iconStyle,
     headerStyles,
