@@ -114,7 +114,6 @@ export function CadastrarEntrada({ route }) {
       <FormHeader
         title={title}
         onSalvar={handleSalvarEntrada}
-        retornarParaPagina={apenasConsulta ? 'ConsultarViagemForm' : 'AlterarViagemForm'}
         paginaDeAlteracao="AlterarEntrada"
         ocultarBotaoSalvar={apenasConsulta}
       />

@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash-screen.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#B6BDEE"
     },
     "assetBundlePatterns": [
@@ -43,6 +43,12 @@
           "photosPermission": "Permita que $(PRODUCT_NAME) acesse suas fotos.",
           "savePhotosPermission": "Permita que $(PRODUCT_NAME) salve fotos.",
           "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Permita que $(PRODUCT_NAME) use seu Face ID."
         }
       ]
     ],
