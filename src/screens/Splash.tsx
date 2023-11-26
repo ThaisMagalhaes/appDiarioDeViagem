@@ -104,7 +104,7 @@ export function Splash({ children }: SplashProps) {
   }, [isSplashAnimationComplete]);
 
   if (isAppReady && isDatabaseReady) {
-    return <View className="flex-1">{children}</View>;
+    return children;
   }
 
   return (

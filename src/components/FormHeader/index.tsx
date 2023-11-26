@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { GestureHandlerRootView, TouchableNativeFeedback } from 'react-native-gesture-handler';
+import { autenticar, verificarAutenticacao } from 'utils/autenticacaoLocal';
 import { MIN_HEADER_HEIGHT } from 'utils/contants';
 import { theme } from 'utils/theme';
 
@@ -21,6 +22,15 @@ export function FormHeader({
   paginaDeAlteracao = 'AlterarViagemForm',
 }: FormHeaderProps) {
   const navigation = useNavigation();
+
+  async function handleAlterar() {
+    const permitiAutenticar = await verificarAutenticacao();
+    const autenticou = await autenticar();
+
+    if (permitiAutenticar && autenticou) {
+      navigation.navigate(paginaDeAlteracao);
+    }
+  }
 
   return (
     <View
@@ -57,7 +67,7 @@ export function FormHeader({
         )}
         {ocultarBotaoSalvar && (
           <TouchableNativeFeedback
-            onPress={() => navigation.navigate(paginaDeAlteracao)}
+            onPress={handleAlterar}
             background={TouchableNativeFeedback.Ripple(theme.colors.azul[200], true)}
             className="my-auto h-8 w-8 items-center justify-center rounded">
             <MaterialIcon name="edit" size={24} color={theme.colors.azul[600]} />

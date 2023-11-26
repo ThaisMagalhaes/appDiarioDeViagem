@@ -1,8 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, SafeAreaView } from 'react-native';
+import { Alert, Keyboard, SafeAreaView } from 'react-native';
 import Animated, { Layout } from 'react-native-reanimated';
 import { FloatingButton, HomeHeader, Card, useHomeHeaderStyles } from '@components';
+
+import Toast from 'react-native-root-toast';
+import { autenticar, verificarAutenticacao } from 'utils/autenticacaoLocal';
+
 const list = [
   {
     id: 1,
@@ -56,16 +60,34 @@ export function Home() {
     }
   }
 
-  function handleRemoverTodasViagensSelecionadas() {
-    // exibir alerta de confirmação de exclusão
-    // autenticação local
-    // remover viagens selecionadas
+  async function removerTodasViagens() {
+    const permitiAutenticar = await verificarAutenticacao();
+    const autenticou = await autenticar();
 
-    const itens = Array.from(viagensSelecionadas, ([id]) => id);
-    const novaListaViagens = viagens.filter((item) => !itens.includes(item.id));
+    if (permitiAutenticar && autenticou) {
+      const itens = Array.from(viagensSelecionadas, ([id]) => id);
+      const novaListaViagens = viagens.filter((item) => !itens.includes(item.id));
 
-    setViagensSelecionadas(new Map());
-    setViagens(novaListaViagens);
+      setViagensSelecionadas(new Map());
+      setViagens(novaListaViagens);
+
+      return;
+    }
+
+    Toast.show('Desculpe, é necessário autenticar antes de prosseguir com a exclusão!', {
+      duration: Toast.durations.LONG,
+      position: -50,
+    });
+  }
+
+  async function handleRemoverTodasViagensSelecionadas() {
+    Alert.alert('Deseja realmente excluir as viagens?', '', [
+      {
+        text: 'Sim',
+        onPress: async () => await removerTodasViagens(),
+      },
+      { text: 'Não', style: 'cancel' },
+    ]);
   }
 
   function handlePesquisarViagens(texto: string) {
