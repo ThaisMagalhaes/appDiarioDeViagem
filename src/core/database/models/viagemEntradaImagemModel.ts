@@ -9,7 +9,10 @@ export class ViagemEntradaImagemModel {
   @Column({ length: 512 })
   caminho: string;
 
-  @ManyToOne(() => ViagemEntradaModel, (entrada) => entrada.imagens)
+  @ManyToOne(() => ViagemEntradaModel, (entrada) => entrada.imagens, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'viagemEntradaId' })
   viagemEntrada: ViagemEntradaModel;
 }

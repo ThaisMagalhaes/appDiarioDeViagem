@@ -51,11 +51,6 @@
           "faceIDPermission": "Permita que $(PRODUCT_NAME) use seu Face ID."
         }
       ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "0704cd38-d8a9-4149-8536-9d214b7ab6c5"
-      }
-    }
+    ]
   }
 }

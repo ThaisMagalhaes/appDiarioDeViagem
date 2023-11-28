@@ -1,10 +1,11 @@
 import { connection } from 'core/database/config';
 import { ViagemEntradaRepository } from 'core/database/repositories';
-import { ViagemEntradaService } from 'core/services';
+import { GerenciadorArquivoService, ViagemEntradaService } from 'core/services';
 
 export function makeViagemEntradaService() {
   const viagemEntradaRepository = new ViagemEntradaRepository(connection);
-  const viagemEntradaService = new ViagemEntradaService(viagemEntradaRepository);
+  const gerenciadorArquivoService = new GerenciadorArquivoService();
+  const viagemEntradaService = new ViagemEntradaService(viagemEntradaRepository, gerenciadorArquivoService);
 
   return viagemEntradaService;
 }

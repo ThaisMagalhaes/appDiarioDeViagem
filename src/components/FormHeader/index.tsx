@@ -1,5 +1,6 @@
 import MaterialIcon from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
+import { ViagemModel } from 'core/database/models';
 import Constants from 'expo-constants';
 import React from 'react';
 import { Text, View } from 'react-native';
@@ -12,13 +13,15 @@ type FormHeaderProps = {
   title: string;
   onSalvar?: () => void;
   ocultarBotaoSalvar?: boolean;
-  paginaDeAlteracao?: keyof ReactNavigation.RootParamList;
+  paginaDeAlteracao?: keyof Omit<ReactNavigation.RootParamList, 'Home'>;
+  viagem?: ViagemModel;
 };
 
 export function FormHeader({
   title,
   ocultarBotaoSalvar,
   onSalvar,
+  viagem,
   paginaDeAlteracao = 'AlterarViagemForm',
 }: FormHeaderProps) {
   const navigation = useNavigation();
@@ -28,7 +31,8 @@ export function FormHeader({
     const autenticou = await autenticar();
 
     if (permitiAutenticar && autenticou) {
-      navigation.navigate(paginaDeAlteracao);
+      const params = { ...viagem, apenasConsulta: false };
+      navigation.navigate(paginaDeAlteracao, params);
     }
   }
 

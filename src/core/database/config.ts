@@ -11,6 +11,7 @@ export const databaseConfiguration: DataSourceOptions = {
   entities,
   logging: true,
   synchronize: true,
+  dropSchema: false,
 };
 
 export const connection = new DataSource(databaseConfiguration);

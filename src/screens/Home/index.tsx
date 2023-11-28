@@ -6,28 +6,14 @@ import { FloatingButton, HomeHeader, Card, useHomeHeaderStyles } from '@componen
 
 import Toast from 'react-native-root-toast';
 import { autenticar, verificarAutenticacao } from 'utils/autenticacaoLocal';
+import { makeViagemService } from 'core';
 
-const list = [
-  {
-    id: 1,
-    local: 'Viagem ao centro da terra',
-    data: new Date('2023-11-13T00:37:11.556Z'),
-    finalizado: true,
-    exibirAno: true,
-  },
-  { id: 2, local: 'Viagem ao novo mundo', data: new Date('2023-11-12T00:37:11.556Z'), finalizado: false },
-  { id: 3, local: 'Viagem ao ceu', data: new Date('2023-10-10T00:37:11.556Z'), finalizado: false },
-  { id: 4, local: 'Viagem a marte', data: new Date('2023-09-25T00:37:11.556Z'), finalizado: false },
-  { id: 5, local: 'Viagem a marte', data: new Date('2023-09-25T00:37:11.556Z'), finalizado: false },
-  { id: 6, local: 'Viagem a marte', data: new Date('2023-09-25T00:37:11.556Z'), finalizado: false },
-  { id: 7, local: 'Viagem a marte', data: new Date('2023-09-25T00:37:11.556Z'), finalizado: false },
-];
-
+const viagemService = makeViagemService();
 export const TEMPO_MILISEGUNDOS_ESPERA_ANIMACAO_FLAT_LIST = 120;
 
 export function Home() {
   const navigation = useNavigation();
-  const [viagens, setViagens] = useState(list);
+  const [viagens, setViagens] = useState([]);
   const [viagensSelecionadas, setViagensSelecionadas] = useState<Map<number, boolean>>(new Map<number, boolean>());
   const [abrirInputPesquisa, setAbrirInputPesquisa] = useState(false);
 
@@ -37,9 +23,30 @@ export function Home() {
 
   useEffect(() => {
     initialMode.current = false;
-  }, []);
+    async function fetchData() {
+      await consultarViagens(null);
+    }
+
+    void fetchData();
+
+    const unsubscribeFocus = navigation.addListener('focus', () => {
+      void fetchData();
+    });
+    return () => {
+      unsubscribeFocus();
+    };
+  }, [navigation]);
 
   const existeItensSelecionados = viagensSelecionadas.size > 0;
+
+  async function consultarViagens(local: string) {
+    try {
+      const retorno = await viagemService.obterTodasComEntradasEImagens(null, local);
+      setViagens(retorno);
+    } catch (error) {
+      console.error('Erro ao obter viagens:', error);
+    }
+  }
 
   function handleFecharInputPesquisa() {
     setAbrirInputPesquisa(false);
@@ -66,6 +73,8 @@ export function Home() {
 
     if (permitiAutenticar && autenticou) {
       const itens = Array.from(viagensSelecionadas, ([id]) => id);
+
+      await viagemService.excluirViagens(itens);
       const novaListaViagens = viagens.filter((item) => !itens.includes(item.id));
 
       setViagensSelecionadas(new Map());
@@ -90,17 +99,10 @@ export function Home() {
     ]);
   }
 
-  function handlePesquisarViagens(texto: string) {
+  async function handlePesquisarViagens(texto: string) {
     Keyboard.dismiss();
 
-    // retornar todas as viagens se o texto for vazio
-    // consultar viagens pelo nome se existir valor no parâmetro texto
-    if (!texto) {
-      setViagens(list);
-      return;
-    }
-    const lista = list.filter((item) => item.local.match(texto));
-    setViagens(lista);
+    await consultarViagens(texto);
   }
 
   const renderListItem = ({ item, index }) => {
@@ -110,11 +112,11 @@ export function Home() {
         posicao={index}
         initialMode={initialMode.current}
         exibirAnoViagem={item.exibirAno}
-        viagem={item}
+        viagem={{ ...item, isViagem: true, descricao: item?.entradas[0]?.descricao }}
         selecionado={!!viagensSelecionadas.get(item.id)}
         habilitarSelecao={existeItensSelecionados}
         onSelecionarViagem={handleSelecionarViagem}
-        onClique={() => navigation.navigate('ConsultarViagemForm')}
+        onClique={() => navigation.navigate('ConsultarViagemForm', item)}
       />
     );
   };
@@ -154,7 +156,7 @@ export function Home() {
         scrollEventThrottle={1}
         onScroll={scrollHandler}
       />
-      <FloatingButton onPress={() => navigation.navigate('CadastrarViagemForm', {})} />
+      <FloatingButton onPress={() => navigation.navigate('CadastrarViagemForm', { apenasConsulta: false } as any)} />
     </SafeAreaView>
   );
 }

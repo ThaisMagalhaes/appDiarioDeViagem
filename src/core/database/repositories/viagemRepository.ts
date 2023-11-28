@@ -25,16 +25,39 @@ export class ViagemRepository implements IViagemRepository {
   async alterar(viagemAtualizada: Partial<ViagemModel>): Promise<ViagemModel | undefined> {
     const viagemOriginal = await this.repository.findOneOrFail({ where: { id: viagemAtualizada.id } });
 
-    // Atualiza os campos desejados da viagem com os valores fornecidos
-    Object.assign(viagemOriginal, viagemAtualizada);
+    viagemOriginal.data = viagemAtualizada.data;
+    viagemOriginal.local = viagemAtualizada.local;
 
     return await this.repository.save(viagemOriginal);
   }
 
-  async excluir(id: number): Promise<boolean> {
-    const viagemExistente = await this.repository.findOneOrFail({ where: { id } });
+  async obterTodasComEntradasEImagens(id?: number, local?: string): Promise<ViagemModel[]> {
+    let query = this.repository
+      .createQueryBuilder('viagem')
+      .addSelect('CAST(viagem.data AS DATE) as dataFormatada')
+      .leftJoinAndSelect('viagem.entradas', 'entrada')
+      .leftJoinAndSelect('entrada.imagens', 'imagem')
+      .groupBy('viagem.id, entrada.id') // Agrupa por IDs para evitar duplicatas
+      .addSelect(['imagem.id', 'imagem.caminho']) // Seleciona os campos desejados da imagem
+      .addSelect('COUNT(imagem.id) as totalImagens') // Conta o total de imagens por entrada
+      .orderBy('viagem.data', 'DESC');
+    if (id) {
+      query = query.where('viagem.id = :id', { id });
+    }
+    if (local) {
+      query = query.where('viagem.local LIKE :local', { local: `%${local}%` });
+    }
 
-    await this.repository.remove(viagemExistente);
-    return true;
+    return await query.getMany();
+  }
+
+  async excluirViagens(ids: number[]): Promise<boolean> {
+    try {
+      await this.repository.delete(ids);
+      return true;
+    } catch (error) {
+      console.log('excluir', error);
+      return false;
+    }
   }
 }
