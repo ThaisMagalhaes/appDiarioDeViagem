@@ -7,19 +7,42 @@ import ImageView from 'react-native-image-viewing';
 import Toast from 'react-native-root-toast';
 import { DIARIO_VIAGEM_DIR_COMPLETO } from 'utils/contants';
 import { theme } from 'utils/theme';
-import { makeGerenciadorArquivoService } from 'core';
+import { makeGerenciadorArquivoService, makeViagemEntradaService } from 'core';
+import { ViagemEntradaModel } from 'core/database/models';
+import { useNavigation } from '@react-navigation/native';
+import { parseISO } from 'date-fns';
 
 const gerenciadorArquivoService = makeGerenciadorArquivoService();
+const viagemEntradaService = makeViagemEntradaService();
 
 export function CadastrarEntrada({ route }) {
+  const navigation = useNavigation();
   const { params } = route;
   const { apenasConsulta, title } = params;
 
   const [imagens, setImagens] = useState<ImagePicker.ImagePickerAsset[]>([]);
   const [imagemSelecionada, setImagemSelecionada] = useState({ visible: false, index: 0 });
-  const imagensUrls = useMemo(() => imagens.map((item) => item.uri), [imagens]);
+  const imagensUrls = useMemo(() => imagens.map((item) => item?.uri), [imagens]);
+  const [entrada, setEntrada] = useState<ViagemEntradaModel>(params);
+  const [local, setLocal] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [dateValue, setDateValue] = useState<Date>(new Date());
+
+  const handleDateChange = (date: Date) => {
+    setDateValue(new Date(date));
+  };
 
   useEffect(() => {
+    if (params.local) {
+      setLocal(params.local);
+    }
+    if (params.data) {
+      setDateValue(parseISO(params.data));
+    }
+    if (params.descricao) {
+      setDescricao(params.descricao);
+    }
+
     const pedirPermissaoLeituraArquivos = async () => {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -37,6 +60,7 @@ export function CadastrarEntrada({ route }) {
   }, []);
 
   useEffect(() => {
+    if (!entrada?.id) return;
     async function carregarImagens() {
       // Carregar as imagens que estiverem cadastradas no banco
       // Usar o Id da entrada quando houver para criar o diretorio, Ex. diarioviagem/01/...
@@ -44,16 +68,15 @@ export function CadastrarEntrada({ route }) {
 
       await gerenciadorArquivoService.criarDiretorioSeNaoExiste(DIARIO_VIAGEM_DIR_COMPLETO);
 
-      const caminhoImagens =
-        await gerenciadorArquivoService.obterCaminhoTodosArquivosDiretorio(DIARIO_VIAGEM_DIR_COMPLETO);
+      // const caminhoImagens =
+      //   await gerenciadorArquivoService.obterCaminhoTodosArquivosDiretorio(DIARIO_VIAGEM_DIR_COMPLETO)
 
-      const imagensUri = caminhoImagens.map((caminho) => ({ uri: caminho }));
-
+      const imagensUri = entrada.imagens.map((imagem) => ({ uri: imagem.caminho }));
       setImagens(imagensUri as ImagePicker.ImagePickerAsset[]);
     }
 
     void carregarImagens();
-  }, []);
+  }, [entrada]);
 
   const handleSelecionarImagens = useCallback(async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -91,23 +114,67 @@ export function CadastrarEntrada({ route }) {
   }, []);
 
   const handleSalvarEntrada = useCallback(async () => {
-    // salvar os dados da entrada
+    if (!local) {
+      alert('Por favor, informe o local.');
+      return;
+    }
+    if (!descricao) {
+      alert('Por favor, informe a descrição.');
+      return;
+    }
+
+    if (!dateValue) {
+      alert('Por favor, selecione a data.');
+      return;
+    }
+
+    if (!params.viagemId) {
+      alert('Viagem não encontrada.');
+      return;
+    }
+    // if (!params.imagem.caminho) {
+    //   setImagens(params.imagem);
+    // }
+
     // salvar as imagens localmente se não existir
     // remover fotos do diretorio que foram excluidas
 
     try {
       const caminhoArquivos = imagensUrls;
 
+      const img = caminhoArquivos?.map((item) => ({
+        caminho: item,
+      }));
+
+      if (!entrada?.id) {
+        const item = await viagemEntradaService.criar({
+          local: local.toString(),
+          data: dateValue,
+          descricao,
+          viagem: { id: params.viagemId } as any,
+          imagens: img as any,
+        });
+        setEntrada(item);
+      } else {
+        await viagemEntradaService.alterar({
+          id: entrada.id,
+          local: local.toString(),
+          data: dateValue,
+          descricao,
+          viagem: { id: params.viagemId } as any,
+          imagens: img as any,
+        });
+        navigation.goBack();
+      }
       // Usar o Id da entrada quando houver para criar o diretorio, Ex. diarioviagem/01/...
       // Isso facilitará as consultas sem precisar filtrar pelo nome do arquivo
-      const diretorioSalvarImagens = DIARIO_VIAGEM_DIR_COMPLETO;
-      await gerenciadorArquivoService.copiarArquivosParaDiretorio(caminhoArquivos, diretorioSalvarImagens);
+      // await gerenciadorArquivoService.copiarArquivosParaDiretorio(caminhoArquivos, diretorioSalvarImagens);
     } catch (erro) {
       console.log(`ERROR: ${erro}`);
 
       return false;
     }
-  }, [imagensUrls]);
+  }, [imagensUrls, local, descricao, dateValue]);
 
   return (
     <SafeAreaView className="flex-1 bg-azul-900">
@@ -119,8 +186,14 @@ export function CadastrarEntrada({ route }) {
       />
 
       <ScrollView nestedScrollEnabled={true} scrollEventThrottle={16} className="mt-4 px-4">
-        <DatePicker onChange={console.log} habilitarAlteracao={!apenasConsulta} />
-        <Input label="Local" placeholder="Informe o local da viagem" editable={!apenasConsulta} />
+        <DatePicker onChange={handleDateChange} habilitarAlteracao={!apenasConsulta} dataPadrao={dateValue} />
+        <Input
+          label="Local"
+          placeholder="Informe o local da viagem"
+          editable={!apenasConsulta}
+          value={local}
+          onChangeText={setLocal}
+        />
         <Input
           multiline
           textAlignVertical="top"
@@ -128,6 +201,8 @@ export function CadastrarEntrada({ route }) {
           placeholder="Informe uma descrição"
           className="h-auto min-h-[220]"
           editable={!apenasConsulta}
+          value={descricao}
+          onChangeText={setDescricao}
         />
         <GestureHandlerRootView className="mb-3 flex-row items-center justify-between">
           <Text className="mb-2 text-base text-azul-600">Fotos</Text>

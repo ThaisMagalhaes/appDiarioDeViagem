@@ -10,8 +10,8 @@ export class ViagemEntradaImagemService {
     return await this.viagemEntradaImagemRepository.criar(viagemEntradaImagem);
   }
 
-  async obterTodas(local?: string) {
-    return await this.viagemEntradaImagemRepository.obterTodas();
+  async obterTodas(id?: number, local?: string) {
+    return await this.viagemEntradaImagemRepository.obterTodas(id, local);
   }
 
   async excluir(id: number): Promise<boolean> {

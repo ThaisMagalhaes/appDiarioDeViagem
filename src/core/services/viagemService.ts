@@ -18,7 +18,11 @@ export class ViagemService {
     return await this.viagemRepository.alterar(viagemAtualizada);
   }
 
-  async excluir(id: number): Promise<boolean> {
-    return await this.viagemRepository.excluir(id);
+  async excluirViagens(ids: number[]): Promise<boolean> {
+    return await this.viagemRepository.excluirViagens(ids);
+  }
+
+  async obterTodasComEntradasEImagens(id?: number, local?: string) {
+    return await this.viagemRepository.obterTodasComEntradasEImagens(id, local);
   }
 }

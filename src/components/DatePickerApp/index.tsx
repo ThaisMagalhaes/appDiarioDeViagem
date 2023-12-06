@@ -1,15 +1,17 @@
 import DateTimePicker, { type DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { useState } from 'react';
+import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 
 type Mode = 'date' | 'time';
 
 type DatePickerProps = {
   onChange?: (date: Date) => void;
+  dataPadrao?: string | Date;
   habilitarAlteracao?: boolean;
 };
 
-export function DatePicker({ onChange, habilitarAlteracao = true }: DatePickerProps) {
+export function DatePicker({ onChange, habilitarAlteracao = true, dataPadrao = null }: DatePickerProps) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState<Mode>('date');
   const [show, setShow] = useState(false);
@@ -33,6 +35,12 @@ export function DatePicker({ onChange, habilitarAlteracao = true }: DatePickerPr
     showMode('date');
   };
 
+  useEffect(() => {
+    if (dataPadrao) {
+      setDate(new Date(dataPadrao));
+    }
+  }, [dataPadrao]);
+
   return (
     <View className="mb-5">
       <Text className="mb-2 text-base text-azul-600">Data</Text>
@@ -40,13 +48,7 @@ export function DatePicker({ onChange, habilitarAlteracao = true }: DatePickerPr
         activeOpacity={0.8}
         onPress={showDatepicker}
         className="w-full rounded border border-azul-700 bg-azul-900 p-3 text-lg focus:border-azul-600">
-        <Text className="py-1 text-base text-azul-100">
-          {date?.toLocaleString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: '2-digit',
-          })}
-        </Text>
+        <Text className="py-1 text-base text-azul-100">{format(date, 'dd/MM/yyyy')}</Text>
       </TouchableOpacity>
       {show && <DateTimePicker value={date} mode={mode} is24Hour={true} onChange={handleChange} />}
     </View>

@@ -17,8 +17,13 @@ export class ViagemEntradaImagemRepository implements IViagemEntradaImagemReposi
     return await this.repository.save(novaViagemEntradaImagem);
   }
 
-  async obterTodas(): Promise<ViagemEntradaImagemModel[]> {
-    return await this.repository.find();
+  async obterTodas(id?: number, local?: string): Promise<ViagemEntradaImagemModel[]> {
+    const queryBuilder = this.repository
+      .createQueryBuilder('imagem') // Usando 'imagem' que é o nome da propriedade na entidade
+      .innerJoinAndSelect('imagem.viagemEntrada', 'viagemEntrada') // Usando 'viagemEntrada' que é o nome da propriedade na entidade
+      .where('viagemEntrada.id = :id', { id: 1 });
+
+    return await queryBuilder.getMany();
   }
 
   async excluir(id: number): Promise<boolean> {

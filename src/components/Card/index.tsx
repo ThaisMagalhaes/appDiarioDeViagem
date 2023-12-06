@@ -3,24 +3,29 @@ import { Image, Text, View } from 'react-native';
 import { GestureHandlerRootView, TouchableNativeFeedback } from 'react-native-gesture-handler';
 import Animated, { SlideOutLeft, ZoomIn } from 'react-native-reanimated';
 import { theme } from '../../utils/theme';
+import { format, parseISO } from 'date-fns';
+import { ViagemEntradaImagemModel } from 'core/database/models';
 
-type Viagem = {
+type CardData = {
   id: number;
   local: string;
   data: Date;
   finalizado?: boolean;
+  descricao?: string;
+  isViagem?: boolean;
+  imagens?: ViagemEntradaImagemModel[];
 };
 
 type Props = {
   posicao: number;
   initialMode?: boolean;
   exibirAnoViagem?: boolean;
-  viagem: Viagem;
+  viagem: CardData;
   selecionado?: boolean;
   habilitarSelecao?: boolean;
   desabilitarAnimacaoEntrada?: boolean;
-  onSelecionarViagem?: (viagem: Viagem) => void;
-  onClique?: (viagem: Viagem) => void;
+  onSelecionarViagem?: (viagem: CardData) => void;
+  onClique?: (viagem: CardData) => void;
 };
 
 export const TEMPO_ESPERA_ANIMACAO_EM_MILISEGUNDOS = 100;
@@ -64,9 +69,7 @@ export function Card({
       <GestureHandlerRootView>
         {exibirAnoViagem && (
           <View className="mb-3">
-            <Text className="text-sm  text-azul-600">
-              {Intl.DateTimeFormat('pt-BR', { year: 'numeric' }).format(viagem.data)}
-            </Text>
+            <Text className="text-sm  text-azul-600">{format(parseISO(viagem.data.toString()), 'yyyy')}</Text>
           </View>
         )}
         <TouchableNativeFeedback
@@ -79,15 +82,11 @@ export function Card({
           <View className="flex-1">
             <View className="flex-row items-baseline gap-1">
               <View className="relative">
-                <Text className="text-2xl font-bold text-azul-50">
-                  {Intl.DateTimeFormat('pt-BR', { day: '2-digit' }).format(viagem.data)}
-                </Text>
+                <Text className="text-2xl font-bold text-azul-50">{format(parseISO(viagem.data.toString()), 'd')}</Text>
                 <View className="absolute bottom-[3px] left-0 z-[-1] h-[6px] w-full bg-azul-600 content-['']" />
               </View>
-              <Text className="mr-2 text-sm text-slate-400">
-                {Intl.DateTimeFormat('pt-BR', { month: 'short' }).format(viagem.data)}
-              </Text>
-              {!viagem.finalizado && (
+              <Text className="mr-2 text-sm text-slate-400">{format(parseISO(viagem.data.toString()), 'MMM')}</Text>
+              {viagem.isViagem && !viagem.finalizado && (
                 <View className="flex-row">
                   <MaterialCommunityIcons name="notebook-edit" size={16} color={theme.colors.slate[400]} />
                   <Text className="ml-1 text-slate-400">Rascunho</Text>
@@ -100,10 +99,7 @@ export function Card({
               </Text>
 
               <Text ellipsizeMode="tail" numberOfLines={3} className="leading-4 text-azul-100">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab quis illum consectetur incidunt minus dolor
-                consequatur odit quaerat eaque, sequi laudantium repellendus ea ipsum voluptatem quia repellat
-                architecto perspiciatis optio modi porro quae quam sint quibusdam facere! Ratione velit laborum
-                dignissimos officia sunt.
+                {viagem.descricao ?? ''}
               </Text>
             </View>
             {viagem.id === 1 && (

@@ -16,7 +16,10 @@ export class ViagemEntradaModel {
   @Column({ type: 'date' })
   data: Date;
 
-  @ManyToOne(() => ViagemModel, (viagem) => viagem.entradas)
+  @ManyToOne(() => ViagemModel, (viagem) => viagem.entradas, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'viagemId' })
   viagem: ViagemModel;
 
